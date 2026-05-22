@@ -7,7 +7,31 @@ import org.springframework.stereotype.Component;
 public class FeedbackService {
 
     public SubmitAnswerResponse evaluate(Question question, String submittedAnswer) {
-        // TODO: teammate implements feedback logic
-        return new SubmitAnswerResponse(false, "Placeholder feedback", "Placeholder explanation");
+        String normalisedSubmission = normalise(submittedAnswer);
+        String normalisedCorrect = normalise(question.getCorrectAnswer());
+
+        boolean correct = !normalisedSubmission.isEmpty()
+                && normalisedSubmission.equals(normalisedCorrect);
+
+        if (correct) {
+            return new SubmitAnswerResponse(
+                    true,
+                    "Correct. Nice work on " + question.getConcept() + ".",
+                    question.getCorrectExplanation()
+            );
+        }
+
+        return new SubmitAnswerResponse(
+                false,
+                "Not quite. Here is a hint to help you think it through.",
+                question.getIncorrectHint()
+        );
+    }
+
+    private String normalise(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value.trim().toLowerCase();
     }
 }
