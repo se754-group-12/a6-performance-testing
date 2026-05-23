@@ -1,0 +1,5 @@
+Label,# Samples,Average,Median,90% Line,95% Line,99% Line,Min,Max,Error %,Throughput,Received KB/sec,Sent KB/sec
+POST submit (valid),9108,1,2,3,3,3,0,24,0.000%,26.83868,8.93,5.50
+POST submit (invalid - blank answer),214,2,2,3,4,5,0,5,0.000%,.72848,0.18,0.15
+POST submit (invalid - unknown quiz id),190,1,2,3,3,3,0,8,0.000%,.70585,0.23,0.18
+TOTAL,9512,1,2,3,3,3,0,24,0.000%,28.02527,9.27,5.76
