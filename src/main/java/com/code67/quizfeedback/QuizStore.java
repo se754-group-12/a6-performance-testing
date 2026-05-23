@@ -469,4 +469,16 @@ public class QuizStore {
         }
         return questions.get(id);
     }
+
+    public Question findByCorrectAnswer(String normalisedAnswer) {
+        if (normalisedAnswer == null || normalisedAnswer.isBlank()) {
+            return null;
+        }
+        for (Question q : questions.values()) {
+            if (normalisedAnswer.equals(q.getCorrectAnswer().trim().toLowerCase())) {
+                return q;
+            }
+        }
+        return null;
+    }
 }
