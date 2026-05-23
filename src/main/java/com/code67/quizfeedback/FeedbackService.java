@@ -6,6 +6,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class FeedbackService {
 
+    private final QuizStore quizStore;
+
+    public FeedbackService(QuizStore quizStore) {
+        this.quizStore = quizStore;
+    }
+
     public SubmitAnswerResponse evaluate(Question question, String submittedAnswer) {
         String normalisedSubmission = normalise(submittedAnswer);
         String normalisedCorrect = normalise(question.getCorrectAnswer());
@@ -20,6 +26,15 @@ public class FeedbackService {
 
         if (FuzzyMatcher.isClose(normalisedSubmission, normalisedCorrect)) {
             return correctFuzzy(question);
+        }
+
+        Question matchedQuestion = quizStore.findByCorrectAnswer(normalisedSubmission);
+        if (matchedQuestion != null
+                && !matchedQuestion.getId().equals(question.getId())
+                && !matchedQuestion.getConcept().equalsIgnoreCase(question.getConcept())) {
+            String feedback = "That sounds like " + matchedQuestion.getConcept()
+                    + ", but this question is about " + question.getConcept() + ".";
+            return new SubmitAnswerResponse(false, feedback, question.getIncorrectHint());
         }
 
         return incorrect(question);
